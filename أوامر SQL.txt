@@ -1,0 +1,170 @@
+
+**************************** Crime_types table /1 ********************************
+
+create table crime_types (
+crime_type_id number ,
+name varchar2(50),
+description varchar2(100),
+constraint pk_crime_types primary key (crime_type_id),
+constraint uq_crime_types unique (name)
+);
+
+
+**************************** Users /2 ********************************
+
+create table users (
+user_id number,
+full_name varchar2(60) not null,
+user_name varchar2(35) not null,
+password_hash varchar2(64) not null,
+role varchar2(15) not null,
+phone varchar2(20),
+email varchar2(55),
+constraint pk_users primary key (user_id),
+constraint uq_users unique (user_name),
+constraint ck_users_role check (role in ('Investigator','Expert','Admin'))
+);
+
+
+**************************** Persons /3 ********************************
+
+create table persons (
+person_id number,
+name varchar2(45),
+alias varchar2(50),
+phone varchar2(20),
+email varchar2(55),
+constraint pk_persons primary key (person_id),
+constraint ck_persons_identity check (name is not null or alias is not null)
+);
+
+
+**************************** Cases /4 ********************************
+
+create table cases (
+case_id number,
+title varchar2(80) not null,
+description varchar2(150),
+open_date date default sysdate not null,
+status varchar2(20) default 'Open' not null,
+incident_date date,
+case_source varchar2(15) not null,
+crime_type_id number not null,
+user_id number not null,
+constraint pk_cases primary key (case_id),
+constraint fk_cases_ctype foreign key (crime_type_id) references
+crime_types (crime_type_id),
+constraint fk_cases_user foreign key (user_id) references 
+users (user_id),
+constraint ck_cases_status check (status in ('open' , 'closed' ,
+'Under_investigation')),
+constraint ck_cases_source check (case_source in
+('Referral' , 'discoverer' , 'complaint' )),
+constraint ck_cases_dates check (incident_date <= open_date)
+);
+
+
+************************** digital_evidences /5 **************************
+
+create table digital_evidences (
+evidence_id number,
+description varchar2(150) not null,
+evidence_type varchar2(20) not null,
+date_collected date not null,
+hash_value varchar2(64) not null,
+storage_location varchar2(50),
+case_id number(10) not null,
+constraint pk_dig_evid primary key (evidence_id),
+constraint fk_dig_evid_case foreign key (case_id)
+references cases (case_id),
+constraint ck_evid_type check (evidence_type in
+('hard_disk' , log_file' , 'mobile' , 'screenshot' 'other'))
+constraint ck_evid_hash_len check (length(hash_value) = 64)
+);
+
+
+************************** digital_indicators /6 **************************
+
+create table digital_indicators (
+indicator_id number,
+indicator_type varchar2(20)not null,
+indicator_value varchar2(180) not null,
+first_seen date,
+case_id number not null,
+constraint pk_dig_ind primary key (indicator_id),
+constraint fk_dig_ind_case foreign key (case_id) references cases (case_id),
+constraint ck_ind_type check (indicator_type in
+('IP' , 'Domain' , 'URL' , 'Email' , 'Account' , 'Wallet'))
+);
+
+
+************************** investigation_reports/7 **************************
+create table investigation_reports (
+report_id number,
+report_type varchar2(20) not null,
+title varchar2(100) not null,
+report_date date default sysdate not null,
+findings varchar2(450) not null,
+recommendations varchar2(250),
+case_id number not null,
+user_id number not null,
+constraint pk_inv_rep primary key (report_id),
+constraint fk_inv_rep_case foreign key (case_id) references cases (case_id),
+constraint fk_inv_rep_user foreign key (user_id) references users (user_id),
+constraint ck_rep_type check (report_type in
+('Device_Analysis' , 'Network_Analysis' , 'Malware_Analysis' , 'other'))
+);
+
+
+************************** audit_logs /8 **************************
+
+create table audit_logs (
+log_id number,
+action_type varchar2(15) not null,
+action_time date default sysdate not null,
+details varchar2(150),
+user_id number not null,
+constraint pk_aud_logs primary key (log_id),
+constraint fk_aud_logs_user foreign key (user_id) references users (user_id),
+constraint ck_audit_type check (action_type in
+('login' , 'logout' , 'login_failed' , 'insert' , 'update' , 'delete'))
+);
+
+
+************************** case_persons /9 **************************
+
+create table case_persons (
+case_id number,
+person_id number,
+role varchar2(18),
+link_date date default sysdate,
+constraint pk_case_per primary key (case_id, person_id, role),
+constraint fk_case_per_case foreign key (case_id) references cases (case_id),
+constraint fk_case_per_person foreign key (person_id) references persons (person_id),
+constraint ck_case_per_role check (role in
+('Victim' , 'Complainant' , 'Suspect' , 'Accused'))
+);
+
+
+************************** user_digital_evidences /10 **************************
+
+create table user_digital_evidences (
+transfer_id number,
+evidence_id number not null,
+user_id number not null,
+transfer_date date default sysdate not null,
+reason varchar2(30) not null,
+hash_verified char(1),
+constraint pk_transfers primary key (transfer_id),
+constraint fk_tra_evid foreign key (evidence_id) references
+digital_evidences (evidence_id),
+constraint fk_tra_user foreign key (user_id) references users (user_id),
+constraint ck_tr_reason check (reason in
+('Collection' , 'Examination' , 'Analysis' , Return_to_Storage')),
+constraint ck_tra_verified check (hash_verified in ('Y','N'))
+);
+
+
+
+
+
