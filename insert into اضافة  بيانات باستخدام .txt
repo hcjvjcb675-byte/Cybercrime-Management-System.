@@ -1,0 +1,176 @@
+
+crime_types table :
+
+insert into crime_types (crime_type_id, name, description)
+values (1, 'Phishing', 'Impersonating a trusted party to steal data');
+
+insert into crime_types (crime_type_id, name, description)
+values (2, 'Ransomware', 'Encrypting data and demanding payment');
+
+insert into crime_types (crime_type_id, name, description)
+values (3, 'Account Hacking', 'Unauthorized access to an account');
+
+insert into crime_types (crime_type_id, name, description)
+values (4, 'Online Blackmail', 'Threatening to publish private data');
+
+insert into crime_types (crime_type_id, name, description)
+values (5, 'Financial Fraud', 'Deceiving a victim to obtain money');
+
+insert into crime_types (crime_type_id, name, description)
+
+
+
+=====================================================================
+
+users table :
+
+insert into users 
+select 1 , 'System Admin', 'admin1', 'a2ec76d69ac945103d084a27bfa2ed04cd77888293813b943e9d20133b13bda7', 'admin', '777000001', 'admin@example.com' from dual union all
+select 2 , 'Ahmed Ali', 'ahmed.ali', '59d6d69b9a0f68b8c9080d8b7df9d489f742c9cef1e56aaff80e28b56fe03a39', 'investigator', '777000002', 'ahmed@example.com' from dual union all
+select 3 , 'Sara Nasser', 'sara.nasser', '3f372cc4d4e0f9b9b8188e3c5453e75a6240c1bca2082ffdf19342d1f26f3861', 'expert', '777000003', 'sara@example.com' from dual union all
+select 4 , 'Omar Said', 'omar.said', '02e05ee801c2b4608d70648ceddb7ed69a6482b2c03682d00b48b59b444572a3', 'investigator', '777000004', 'omar@example.com' from dual ;
+
+
+=====================================================================
+
+persons table :
+
+insert into persons
+select 1 , 'Salem Mohammed', null, '777100001', 'salem@example.com' from dual union all
+select 2 , null, 'WolfX', null, null from dual union all
+select 3 , 'TechCorp Ltd', null, '777100003', 'info@techcorp.example' from dual union all
+select 4 , 'Khaled Omar', 'KO_99', '777100004', null from dual union all
+select 5 , 'Mona Ali', null, '777100005', 'mona@example.com' from dual ;
+
+
+=====================================================================
+
+cases table :
+
+insert into cases
+values ( 101, 'Bank account hacking', 'Victim reported unauthorized transfers', to_date('2026-10-20','YYYY-MM-DD'), 'under_investigation', to_date('2026-10-15','YYYY-MM-DD'), 'complaint', 3, 2) ;
+
+insert into cases
+values ( 102, 'Company data leak found on a forum', 'Detected by the monitoring team', to_date('2026-10-25','YYYY-MM-DD'), 'open', to_date('2026-10-22','YYYY-MM-DD'), 'discoverer', 6, 4) ;
+
+insert into cases
+values ( 103, 'Phishing campaign from an agency', 'Referred by another agency', to_date('2026-10-28','YYYY-MM-DD'), 'open', null, 'referral', 1, 2) ;
+
+insert into cases
+values ( 104, 'Online blackmail', 'Victim threatened with private photos', to_date('2026-11-01','YYYY-MM-DD'), 'closed', to_date('2026-10-30','YYYY-MM-DD'), 'complaint', 4, 4) ;
+
+
+=====================================================================
+
+case_persons table :
+
+insert into case_persons
+select 101, 1, 'complainant', to_date('2026-10-20','YYYY-MM-DD') from dual union all 
+select 101, 1, 'victim', to_date('2026-10-20','YYYY-MM-DD') from dual union all 
+select 101, 2, 'suspect', to_date('2026-10-23','YYYY-MM-DD') from dual union all
+select 102, 3, 'victim', to_date('2026-10-25','YYYY-MM-DD') from dual union all 
+select 103, 4, 'victim', to_date('2026-10-28','YYYY-MM-DD') from dual union all 
+select 104, 5, 'complainant', to_date('2026-11-01','YYYY-MM-DD') from dual union all
+select 104, 5, 'victim', to_date('2026-11-01','YYYY-MM-DD') from dual union all
+select 104, 4, 'accused', to_date('2026-11-02','YYYY-MM-DD') from dual ;
+
+=====================================================================
+
+Digital_evidences table :
+
+insert into digital_evidences
+values (501, 'Hard disk 500GB from the victim laptop', 'hard_disk', to_date('2026-10-21','YYYY-MM-DD'), 'd09c24896fed6074c284c98f0eec6e4214d15457b9bddfcafe569c6daa3e7e1b', 'Safe 3', 101);
+
+insert into digital_evidences
+values (502, 'Server log file with suspicious logins', 'log_file', to_date('2026-10-22','YYYY-MM-DD'), '1826d021f291253bc3f79452402e6b79944dbaaa73762d42020beae419632b45', 'Server vault', 101);
+
+insert into digital_evidences
+values (503, 'Screenshot of the forum post', 'screenshot', to_date('2026-10-26','YYYY-MM-DD'), 'f5fb607ed707381a0ffb4900894ad2e0bd2bc0d121eade60c98f11a7f892e6d4', 'Shelf B2', 102);
+
+insert into digital_evidences
+values (504, 'Mobile phone of the victim', 'mobile', to_date('2026-11-01','YYYY-MM-DD'), '5d82adb8f56dd1323a11e1899ca5bf2c8806aef3ab194fd5bc1caaf1ae0d2c65', 'Safe 1', 104);
+
+=====================================================================
+
+Digital_indicators table :
+
+insert into digital_indicators
+select 88, 'IP', '203.0.113.7', to_date('2026-10-22','YYYY-MM-DD'), 101 from dual union all
+select 89, 'Domain', 'fake-bank.example', to_date('2026-10-22','YYYY-MM-DD'), 101 from dual union all
+select 90, 'IP', '203.0.113.7', to_date('2026-10-26','YYYY-MM-DD'), 102 from dual union all
+select 91, 'Account', '@wolfx_99', to_date('2026-10-31','YYYY-MM-DD'), 104 from dual union all
+select 92, 'Wallet', 'bc1qexample0000000000000', to_date('2026-11-02','YYYY-MM-DD'), 104 from dual ;
+
+
+=====================================================================
+
+Investigation_reports table :
+
+insert into investigation_reports
+select 20, 'device_analysis', 'Analysis of the victim laptop', to_date('2026-10-24','YYYY-MM-DD'), 'Remote access tool found installed on the laptop', 'Isolate the device and reset all passwords', 101, 3 from dual union all
+select 21, 'network_analysis', 'Server log analysis', to_date('2026-10-25','YYYY-MM-DD'), 'Repeated logins from one external address', 'Block the address and review the firewall rules', 101, 3 from dual union all
+select 22, 'malware_analysis', 'Forum post analysis', to_date('2026-10-28','YYYY-MM-DD'), 'Post links to a file hosting leaked data', 'Request removal and notify the company', 102, 3 from dual ;
+
+=====================================================================
+
+audit_logs table :
+
+insert into audit_logs
+values (1, 'login', to_date('2026-10-20 09:00:00','YYYY-MM-DD HH24:MI:SS'), 'User logged in', 2);
+
+insert into audit_logs
+values (2, 'insert', to_date('2026-10-20 09:10:00','YYYY-MM-DD HH24:MI:SS'), 'Created case 101', 2);
+
+insert into audit_logs
+values (3, 'insert', to_date('2026-10-21 11:30:00','YYYY-MM-DD HH24:MI:SS'), 'Added evidence 501 to case 101', 2);
+
+insert into audit_logs
+values (4, 'update', to_date('2026-10-23 14:05:00','YYYY-MM-DD HH24:MI:SS'), 'Changed status of case 101 to under_investigation', 2);
+
+insert into audit_logs
+values (5, 'login_failed', to_date('2026-10-24 08:15:00','YYYY-MM-DD HH24:MI:SS'), 'Wrong password', 4);
+
+insert into audit_logs 
+values (6, 'logout', to_date('2026-10-24 17:00:00','YYYY-MM-DD HH24:MI:SS'), 'User logged out', 2);
+
+
+=====================================================================
+
+
+user_digital_evidences table :
+
+insert into user_digital_evidences 
+values (1, 501, 2, to_date('2026-10-21','YYYY-MM-DD'), 'collection', 'Y');
+
+insert into user_digital_evidences
+values (2, 501, 3, to_date('2026-10-23','YYYY-MM-DD'), 'analysis', 'Y');
+
+insert into user_digital_evidences
+values (3, 501, 2, to_date('2026-10-27','YYYY-MM-DD'), 'return_to_storage', 'Y');
+
+insert into user_digital_evidences
+values (4, 502, 2, to_date('2026-10-22','YYYY-MM-DD'), 'collection', 'Y');
+
+insert into user_digital_evidences
+values (5, 503, 4, to_date('2026-10-26','YYYY-MM-DD'), 'collection', 'Y');
+
+insert into user_digital_evidences
+values (6, 504, 4, to_date('2026-11-01','YYYY-MM-DD'), 'collection', 'Y');
+
+insert into user_digital_evidences
+values (7, 504, 3, to_date('2026-11-02','YYYY-MM-DD'), 'examination', 'N');
+
+
+commit;
+
+
+
+
+
+
+
+
+
+
+
+
